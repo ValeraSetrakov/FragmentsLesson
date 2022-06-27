@@ -17,6 +17,7 @@ class ChatsView @JvmOverloads constructor(
 ) : RecyclerView(context, attrs) {
 
     var chatClickListener: (Chat) -> Unit = {}
+    var chatLongClickListener: (Chat) -> Boolean = { false }
 
     private val adapter = Adapter()
 
@@ -68,6 +69,9 @@ class ChatsView @JvmOverloads constructor(
             fun bind(chat: Chat) {
                 binding.root.setOnClickListener {
                     chatClickListener(chat)
+                }
+                binding.root.setOnLongClickListener {
+                    chatLongClickListener(chat)
                 }
                 binding.title.text = chat.title
                 binding.message.text = chat.message
