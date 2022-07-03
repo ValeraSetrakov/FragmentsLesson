@@ -35,7 +35,8 @@ class ChatsView @JvmOverloads constructor(
     data class Chat(
         val id: String,
         val title: CharSequence,
-        val message: CharSequence
+        val message: CharSequence,
+        val isRead: Boolean
     )
 
     private inner class Adapter : RecyclerView.Adapter<Adapter.ViewHolder>() {
