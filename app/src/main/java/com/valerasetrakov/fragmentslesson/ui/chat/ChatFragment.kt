@@ -18,6 +18,7 @@ class ChatFragment: Fragment(R.layout.fragment_chat) {
         val chatId = requireArguments().getString(CHAT_ID)
         requireNotNull(chatId)
         loadMessages(chatId)
+        binding.toolbar.setNavigationOnClickListener { requireActivity().onBackPressed() }
     }
 
     private fun loadMessages(chatId: String) {

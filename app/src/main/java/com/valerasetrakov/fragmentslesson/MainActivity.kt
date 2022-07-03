@@ -4,12 +4,11 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
-import androidx.fragment.app.FragmentResultListener
-import androidx.fragment.app.add
-import androidx.fragment.app.commit
+import androidx.fragment.app.*
 import com.valerasetrakov.fragmentslesson.databinding.ActivityMainBinding
 import com.valerasetrakov.fragmentslesson.ui.chat.ChatFragment
 import com.valerasetrakov.fragmentslesson.ui.chats.ChatsFragment
+import com.valerasetrakov.fragmentslesson.ui.filter.FilterFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -19,12 +18,18 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        supportFragmentManager.fragmentFactory = CustomFragmentFactory(FilterCommunicator())
         if (savedInstanceState == null) {
             showChats()
             supportFragmentManager.setFragmentResultListener(
                 ChatsFragment.RESULT_KEY,
                 this,
                 ChatsResultListener()
+            )
+            supportFragmentManager.setFragmentResultListener(
+                ChatsFragment.OPEN_FILTER_KEY,
+                this,
+                OpenFilterListener()
             )
         }
     }
@@ -52,6 +57,28 @@ class MainActivity : AppCompatActivity() {
             val chatId = result.getString(ChatsFragment.SELECTED_CHAT_ID)
             requireNotNull(chatId)
             showChat(chatId)
+        }
+    }
+
+    private inner class OpenFilterListener: FragmentResultListener {
+        override fun onFragmentResult(requestKey: String, result: Bundle) {
+            supportFragmentManager.commit {
+                setReorderingAllowed(true)
+                replace<FilterFragment>(binding.root.id)
+                addToBackStack(null)
+            }
+        }
+    }
+
+    private class CustomFragmentFactory(
+        private val communicator: FilterCommunicator
+    ): FragmentFactory() {
+        override fun instantiate(classLoader: ClassLoader, className: String): Fragment {
+            return when(className) {
+                ChatsFragment::class.java.canonicalName -> ChatsFragment(communicator)
+                FilterFragment::class.java.canonicalName -> FilterFragment(communicator)
+                else -> super.instantiate(classLoader, className)
+            }
         }
     }
 }
