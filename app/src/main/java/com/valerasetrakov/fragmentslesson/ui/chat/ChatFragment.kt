@@ -13,7 +13,7 @@ import com.valerasetrakov.fragmentslesson.databinding.FragmentChatBinding
  * Экран чата
  */
 class ChatFragment(
-    private val repository: Repository
+    // TODO добавить передачу репозитория
 ): Fragment(R.layout.fragment_chat) {
 
     private var _binding: FragmentChatBinding? = null
@@ -36,23 +36,17 @@ class ChatFragment(
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         Log.d(ChatFragment::class.java.simpleName, "Save state")
-        outState.putSerializable(MESSAGES_KEY, ArrayList(messages))
+        TODO("Сохраняем список сообщений")
     }
 
     private fun loadMessages() {
-        val chatId = requireArguments().getString(CHAT_ID)
-        requireNotNull(chatId)
-        if (messages.isEmpty())
-            messages = repository.loadMessages(chatId)
-        binding.messages.showMessages(messages)
+        TODO("Проверяем не пустой ли уже список сообщений," +
+                "если все норм, то отображаем его, если нет, то достаем из переданных параметров идентификатор," +
+                "грузим сообщения, сохраняем их во внутреннем состоянии и отображаем")
     }
 
     private fun restoreMessages(savedInstanceState: Bundle?) {
-        savedInstanceState?.let {
-            Log.d(ChatFragment::class.java.simpleName, "Restore state")
-            messages = it.getSerializable(MESSAGES_KEY) as? List<MessagesView.Message>
-                ?: emptyList()
-        }
+        TODO("Восстанавливаем список сообщений")
     }
 
     override fun onDestroyView() {

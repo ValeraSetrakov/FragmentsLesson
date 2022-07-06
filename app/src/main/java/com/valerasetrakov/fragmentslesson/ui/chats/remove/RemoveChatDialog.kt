@@ -11,18 +11,12 @@ import androidx.fragment.app.DialogFragment
 class RemoveChatDialog : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return AlertDialog.Builder(requireContext())
-            .setTitle("Предупреждение")
-            .setMessage("Вы точно хотите удалить этот диалог?")
-            .setPositiveButton("Да") { _, _ -> removeDialog() }
-            .setNegativeButton("Нет") { _, _ -> dismiss() }
-            .create()
+        TODO("Возвращаем AlertDialog")
+        return super.onCreateDialog(savedInstanceState)
     }
 
     private fun removeDialog() {
-        parentFragmentManager.setFragmentResult(
-            RESULT_KEY, requireArguments()
-        )
+        TODO("Отправляем событие подтверждения удаления чата")
     }
 
     companion object {

@@ -35,10 +35,7 @@ class FilterFragment: BottomSheetDialogFragment() {
     }
 
     private fun chooseFilter(filter: FilterEvent) {
-        parentFragmentManager.setFragmentResult(
-            CHOOSED_FILTER_KEY,
-            bundleOf(CHOOSED_FILTER_KEY to filter)
-        )
+        TODO("Отсылаем выбранный фильтр")
     }
 
     private fun Int.getFilterById(): FilterEvent {

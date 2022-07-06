@@ -19,7 +19,7 @@ import kotlin.collections.ArrayList
  * Экран списка чатов
  */
 class ChatsFragment(
-    private val repository: Repository
+    // TODO добавить передачу репозитория
 ): Fragment(R.layout.fragment_chats) {
 
     private var _binding: FragmentChatsBinding? = null
@@ -44,19 +44,19 @@ class ChatsFragment(
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         Log.d(ChatsFragment::class.java.simpleName, "Save state")
-        outState.putSerializable(CHATS_KEY, ArrayList(chats))
+        TODO("Сохраняем загруженный список чатов")
     }
 
     private fun loadChats() {
-        if (chats.isEmpty())
-            chats = repository.loadChats()
+        TODO("Вначале нужно проверить загружали ли мы уже список чатов," +
+                "если все норм, то отображаем его, если нет, то грузим," +
+                "сохраняем в переменную и отображаем")
     }
 
     private fun restoreChats(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
             Log.d(ChatsFragment::class.java.simpleName, "Restore state")
-            chats = it.getSerializable(CHATS_KEY) as? List<ChatsView.Chat>
-                ?: emptyList()
+            TODO("Восстанавливаем список чатов")
         }
     }
 
@@ -85,37 +85,23 @@ class ChatsFragment(
     }
 
     private fun subscribeToRemoveChatDialog() {
-        childFragmentManager.setFragmentResultListener(
-            RemoveChatDialog.RESULT_KEY,
-            this,
-            RemoveResultListener()
-        )
+        TODO("Подписаться на подтверждение удаления чата")
     }
 
     private fun subscribeToFilter() {
-        childFragmentManager.setFragmentResultListener(
-            FilterFragment.CHOOSED_FILTER_KEY,
-            this,
-            FilterResultListener()
-        )
+        TODO("Подписываемся на выбор фильтра")
     }
 
     private fun showFilters() {
-        FilterFragment()
-            .show(childFragmentManager, null)
+        TODO("Отображаем диалог с выбором фильтра")
     }
 
     private fun showChat(chat: ChatsView.Chat) {
-        parentFragmentManager.setFragmentResult(
-            RESULT_KEY,
-            bundleOf(SELECTED_CHAT_ID to chat.id)
-        )
+        TODO("Добавить отправку события отображения чата")
     }
 
     private fun suggestRemoveChat(chat: ChatsView.Chat): Boolean {
-        RemoveChatDialog().apply {
-            arguments = bundleOf(RemoveChatDialog.CHAT_ID_KEY to chat.id)
-        }.also { it.show(childFragmentManager, null) }
+        TODO("Отображаем диалог подтверждения удаления чата")
         return true
     }
 
@@ -136,22 +122,6 @@ class ChatsFragment(
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    private inner class RemoveResultListener: FragmentResultListener {
-        override fun onFragmentResult(requestKey: String, result: Bundle) {
-            val removableDialogId = result.getString(RemoveChatDialog.CHAT_ID_KEY)
-            chats.find { it.id == removableDialogId }
-                ?.let { chats - it }
-                ?.also { binding.chats.showChats(it) }
-        }
-    }
-
-    private inner class FilterResultListener: FragmentResultListener {
-        override fun onFragmentResult(requestKey: String, result: Bundle) {
-            val filter = result.getSerializable(FilterFragment.CHOOSED_FILTER_KEY) as FilterEvent
-            filterChats(filter)
-        }
     }
 
     companion object {
