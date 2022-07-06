@@ -1,16 +1,20 @@
 package com.valerasetrakov.fragmentslesson.base
 
-import com.valerasetrakov.fragmentslesson.ui.chat.MessagesView
-import com.valerasetrakov.fragmentslesson.ui.chats.ChatsView
+import android.util.Log
 import java.util.*
 
+/**
+ * Источник данных, имитурует сервер
+ */
 class Repository {
 
     fun loadChats(): List<ChatsView.Chat> {
+        Log.d(Repository::class.java.simpleName,"Load chats")
         return chats
     }
 
     fun loadMessages(chatId: String): List<MessagesView.Message> {
+        Log.d(Repository::class.java.simpleName,"Load messages")
         return messages
     }
 

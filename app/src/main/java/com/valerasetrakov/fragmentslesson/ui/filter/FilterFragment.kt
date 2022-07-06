@@ -10,6 +10,9 @@ import com.valerasetrakov.fragmentslesson.R
 import com.valerasetrakov.fragmentslesson.base.FilterEvent
 import com.valerasetrakov.fragmentslesson.databinding.FragmentFilterBinding
 
+/**
+ * Экран фильтров
+ */
 class FilterFragment: BottomSheetDialogFragment() {
 
     private var _binding: FragmentFilterBinding? = null

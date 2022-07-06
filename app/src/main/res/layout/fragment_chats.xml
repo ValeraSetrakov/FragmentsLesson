@@ -12,7 +12,7 @@
         app:menu="@menu/chats_menu"
         app:title="Чаты"/>
 
-    <com.valerasetrakov.fragmentslesson.ui.chats.ChatsView
+    <com.valerasetrakov.fragmentslesson.base.ChatsView
         android:id="@+id/chats"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

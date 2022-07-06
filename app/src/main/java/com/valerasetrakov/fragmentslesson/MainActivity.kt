@@ -10,6 +10,9 @@ import com.valerasetrakov.fragmentslesson.ui.chat.ChatFragment
 import com.valerasetrakov.fragmentslesson.ui.chats.ChatsFragment
 import com.valerasetrakov.fragmentslesson.ui.filter.FilterFragment
 
+/**
+ * Хост Activity
+ */
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding

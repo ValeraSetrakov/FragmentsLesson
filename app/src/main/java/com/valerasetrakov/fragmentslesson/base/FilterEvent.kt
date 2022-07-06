@@ -1,5 +1,21 @@
 package com.valerasetrakov.fragmentslesson.base
 
+/**
+ * Список фильтров для чатов
+ */
 enum class FilterEvent {
-    ALL, ONLY_READ, ONLY_UNREAD;
+    /**
+     * Все чаты
+     */
+    ALL,
+
+    /**
+     * Отображать только прочитанные чаты
+     */
+    ONLY_READ,
+
+    /**
+     * Отображать только непрочитанные чаты
+     */
+    ONLY_UNREAD;
 }

@@ -1,18 +1,18 @@
-package com.valerasetrakov.fragmentslesson.ui.chat
+package com.valerasetrakov.fragmentslesson.base
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Rect
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.valerasetrakov.fragmentslesson.R
-import com.valerasetrakov.fragmentslesson.databinding.ItemChatBinding
 import com.valerasetrakov.fragmentslesson.databinding.ItemMessageBinding
+import java.io.Serializable
 
+/**
+ * [View] для отображения списка сообщений в чате
+ */
 class MessagesView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
 ) : RecyclerView(context, attrs) {
@@ -26,14 +26,22 @@ class MessagesView @JvmOverloads constructor(
         setAdapter(adapter)
     }
 
-    fun showMessages(chats: Collection<Message>) {
-        adapter.setMessages(chats)
+    /**
+     * Отображение списка [messages]
+     */
+    fun showMessages(messages: Collection<Message>) {
+        adapter.setMessages(messages)
     }
 
+    /**
+     * Содержит информацию о сообщении
+     * @param id идентификатор сообщения
+     * @param message сообщение
+     */
     data class Message(
         val id: String,
         val message: CharSequence
-    )
+    ): Serializable
 
     private class Adapter : RecyclerView.Adapter<Adapter.ViewHolder>() {
 

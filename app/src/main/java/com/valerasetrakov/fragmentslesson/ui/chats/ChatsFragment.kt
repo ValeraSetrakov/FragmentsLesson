@@ -1,18 +1,23 @@
 package com.valerasetrakov.fragmentslesson.ui.chats
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentResultListener
 import com.valerasetrakov.fragmentslesson.R
+import com.valerasetrakov.fragmentslesson.base.ChatsView
 import com.valerasetrakov.fragmentslesson.base.FilterEvent
 import com.valerasetrakov.fragmentslesson.base.Repository
 import com.valerasetrakov.fragmentslesson.databinding.FragmentChatsBinding
 import com.valerasetrakov.fragmentslesson.ui.chats.remove.RemoveChatDialog
 import com.valerasetrakov.fragmentslesson.ui.filter.FilterFragment
-import java.util.*
+import kotlin.collections.ArrayList
 
+/**
+ * Экран списка чатов
+ */
 class ChatsFragment(
     private val repository: Repository
 ): Fragment(R.layout.fragment_chats) {
@@ -21,6 +26,11 @@ class ChatsFragment(
     private val binding: FragmentChatsBinding get() = _binding!!
 
     private var chats: List<ChatsView.Chat> = emptyList()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        restoreChats(savedInstanceState)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -31,8 +41,23 @@ class ChatsFragment(
         subscribeToFilter()
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        Log.d(ChatsFragment::class.java.simpleName, "Save state")
+        outState.putSerializable(CHATS_KEY, ArrayList(chats))
+    }
+
     private fun loadChats() {
-        this.chats = repository.loadChats()
+        if (chats.isEmpty())
+            chats = repository.loadChats()
+    }
+
+    private fun restoreChats(savedInstanceState: Bundle?) {
+        savedInstanceState?.let {
+            Log.d(ChatsFragment::class.java.simpleName, "Restore state")
+            chats = it.getSerializable(CHATS_KEY) as? List<ChatsView.Chat>
+                ?: emptyList()
+        }
     }
 
     private fun initViews() {
@@ -42,7 +67,7 @@ class ChatsFragment(
             setOnMenuItemClickListener { menuItem ->
                 when(menuItem.itemId) {
                     R.id.filter -> {
-                        openFilterDialog()
+                        showFilters()
                         true
                     }
                     else -> false
@@ -75,7 +100,7 @@ class ChatsFragment(
         )
     }
 
-    private fun openFilterDialog() {
+    private fun showFilters() {
         FilterFragment()
             .show(childFragmentManager, null)
     }
@@ -132,5 +157,6 @@ class ChatsFragment(
     companion object {
         const val RESULT_KEY = "SELECTED_CHAT"
         const val SELECTED_CHAT_ID = "SELECTED_CHAT_ID"
+        private const val CHATS_KEY = "CHATS_KEY"
     }
 }
