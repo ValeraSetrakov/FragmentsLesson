@@ -4,27 +4,31 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import com.valerasetrakov.fragmentslesson.R
+import com.valerasetrakov.fragmentslesson.base.Repository
 import com.valerasetrakov.fragmentslesson.databinding.FragmentChatBinding
 import java.util.*
 
-class ChatFragment: Fragment(R.layout.fragment_chat) {
+class ChatFragment(
+    private val repository: Repository
+): Fragment(R.layout.fragment_chat) {
 
     private var _binding: FragmentChatBinding? = null
     private val binding get() = _binding!!
 
+    private var messages: List<MessagesView.Message> = emptyList()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentChatBinding.bind(requireView())
-        val chatId = requireArguments().getString(CHAT_ID)
-        requireNotNull(chatId)
-        loadMessages(chatId)
+        loadMessages()
         binding.toolbar.setNavigationOnClickListener { requireActivity().onBackPressed() }
     }
 
-    private fun loadMessages(chatId: String) {
-        binding.messages.apply {
-            showMessages(messages)
-        }
+    private fun loadMessages() {
+        val chatId = requireArguments().getString(CHAT_ID)
+        requireNotNull(chatId)
+        messages = repository.loadMessages(chatId)
+        binding.messages.showMessages(messages)
     }
 
     override fun onDestroyView() {
@@ -34,23 +38,5 @@ class ChatFragment: Fragment(R.layout.fragment_chat) {
 
     companion object {
         const val CHAT_ID = "CHAT_ID"
-        private val messages = listOf(
-            MessagesView.Message(
-                id = UUID.randomUUID().toString(),
-                message = "Привет"
-            ),
-            MessagesView.Message(
-                id = UUID.randomUUID().toString(),
-                message = "Как дела?"
-            ),
-            MessagesView.Message(
-                id = UUID.randomUUID().toString(),
-                message = "Что делаешь?"
-            ),
-            MessagesView.Message(
-                id = UUID.randomUUID().toString(),
-                message = "Не хочешь увидеться?"
-            ),
-        )
     }
 }

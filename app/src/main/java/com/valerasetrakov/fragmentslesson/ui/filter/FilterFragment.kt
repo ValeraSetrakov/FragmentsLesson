@@ -1,17 +1,27 @@
 package com.valerasetrakov.fragmentslesson.ui.filter
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
-import androidx.fragment.app.Fragment
+import android.view.ViewGroup
+import androidx.core.os.bundleOf
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.valerasetrakov.fragmentslesson.R
+import com.valerasetrakov.fragmentslesson.base.FilterEvent
 import com.valerasetrakov.fragmentslesson.databinding.FragmentFilterBinding
 
-class FilterFragment(
-    private val filterConsumer: FilterProducer
-): Fragment(R.layout.fragment_filter) {
+class FilterFragment: BottomSheetDialogFragment() {
 
     private var _binding: FragmentFilterBinding? = null
     private val binding: FragmentFilterBinding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.fragment_filter, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -19,29 +29,25 @@ class FilterFragment(
         binding.typeOfChatsRg.setOnCheckedChangeListener { _, filterId ->
             chooseFilter(filterId.getFilterById())
         }
-        binding.toolbar.setNavigationOnClickListener { requireActivity().onBackPressed() }
     }
 
-    private fun chooseFilter(filter: FilterProducer.FilterEvent) {
-        filterConsumer.sendFilterEvent(filter)
+    private fun chooseFilter(filter: FilterEvent) {
+        parentFragmentManager.setFragmentResult(
+            CHOOSED_FILTER_KEY,
+            bundleOf(CHOOSED_FILTER_KEY to filter)
+        )
     }
 
-    private fun Int.getFilterById(): FilterProducer.FilterEvent {
+    private fun Int.getFilterById(): FilterEvent {
         return when(this) {
-            binding.allRb.id -> FilterProducer.FilterEvent.All
-            binding.readRb.id -> FilterProducer.FilterEvent.OnlyRead
-            binding.unreadRb.id -> FilterProducer.FilterEvent.OnlyUnread
+            binding.allRb.id -> FilterEvent.ALL
+            binding.readRb.id -> FilterEvent.ONLY_READ
+            binding.unreadRb.id -> FilterEvent.ONLY_UNREAD
             else -> error("Unsupported filter type")
         }
     }
 
-    interface FilterProducer {
-        fun sendFilterEvent(filter: FilterEvent)
-
-        sealed class FilterEvent {
-            object All: FilterEvent()
-            object OnlyRead: FilterEvent()
-            object OnlyUnread: FilterEvent()
-        }
+    companion object {
+        const val CHOOSED_FILTER_KEY = "CHOOSED_FILTER_KEY"
     }
 }
