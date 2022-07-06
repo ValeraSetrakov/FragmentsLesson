@@ -10,7 +10,7 @@ import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.lifecycleScope
 import com.valerasetrakov.fragmentslesson.R
 import com.valerasetrakov.fragmentslesson.databinding.FragmentChatsBinding
-import com.valerasetrakov.fragmentslesson.ui.chats.remove.RemoveDialog
+import com.valerasetrakov.fragmentslesson.ui.chats.remove.RemoveChatDialog
 import java.util.*
 
 class ChatsFragment(
@@ -29,7 +29,7 @@ class ChatsFragment(
             chatLongClickListener = ::suggestRemoveChat
         }
         childFragmentManager.setFragmentResultListener(
-            RemoveDialog.RESULT_KEY,
+            RemoveChatDialog.RESULT_KEY,
             this,
             RemoveResultListener()
         )
@@ -61,8 +61,8 @@ class ChatsFragment(
     }
 
     private fun suggestRemoveChat(chat: ChatsView.Chat): Boolean {
-        RemoveDialog().apply {
-            arguments = bundleOf(RemoveDialog.DIALOG_ID_KEY to chat.id)
+        RemoveChatDialog().apply {
+            arguments = bundleOf(RemoveChatDialog.CHAT_ID_KEY to chat.id)
         }.also { it.show(childFragmentManager, null) }
         return true
     }
@@ -100,12 +100,10 @@ class ChatsFragment(
 
     private inner class RemoveResultListener: FragmentResultListener {
         override fun onFragmentResult(requestKey: String, result: Bundle) {
-            val removableDialogId = result.getString(RemoveDialog.DIALOG_ID_KEY)
-            Toast.makeText(
-                this@ChatsFragment.requireContext(),
-                "Remove dialog id $removableDialogId",
-                Toast.LENGTH_SHORT
-            ).show()
+            val removableDialogId = result.getString(RemoveChatDialog.CHAT_ID_KEY)
+            chats.find { it.id == removableDialogId }
+                ?.let { chats - it }
+                ?.also { binding.chats.showChats(it) }
         }
     }
 
