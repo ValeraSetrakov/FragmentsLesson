@@ -18,14 +18,12 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setupFragmentFactory()
+        // todo добавить вызов настройки фрабрики фрагментов
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        if (savedInstanceState == null) {
-            showChats()
-        }
-        subscribeToChatSelection()
+        // todo установить стартовый фрагмент
+        // todo добавить подписку на выбор чата
     }
 
     private fun subscribeToChatSelection() {

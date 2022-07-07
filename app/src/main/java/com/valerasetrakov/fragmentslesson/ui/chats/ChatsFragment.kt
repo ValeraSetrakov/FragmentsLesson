@@ -44,7 +44,7 @@ class ChatsFragment(
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         Log.d(ChatsFragment::class.java.simpleName, "Save state")
-        TODO("Сохраняем загруженный список чатов")
+        // todo добавить сохранение списка чатов
     }
 
     private fun loadChats() {
@@ -57,6 +57,12 @@ class ChatsFragment(
         savedInstanceState?.let {
             Log.d(ChatsFragment::class.java.simpleName, "Restore state")
             TODO("Восстанавливаем список чатов")
+        }
+    }
+
+    private fun saveChats(savedInstanceState: Bundle?) {
+        savedInstanceState?.let {
+            TODO("Сохраняем список чатов")
         }
     }
 
